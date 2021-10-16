@@ -73,18 +73,33 @@ exports.addUser = addUser;
  * @param {string} guest_id The id of the user.
  * @return {Promise<[{}]>} A promise to the reservations.
  */
-const getAllReservations = function(guest_id, limit = 10) {
-  return pool
-  .query (`SELECT * FROM reservations WHERE guest_id = $1 LIMIT $2;`, [guest_id, limit])
-  .then((result) => {
-    return Promise.resolve(result.rows);
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
-  // return getAllProperties(null, 2);
-}
-exports.getAllReservations = getAllReservations;
+const getFulfilledReservations = function(guest_id, limit = 10) {
+  const queryString = `
+  SELECT properties.*, reservations.*, avg(rating) as average_rating
+  FROM reservations
+  JOIN properties ON reservations.property_id = properties.id
+  JOIN property_reviews ON properties.id = property_reviews.property_id 
+  WHERE reservations.guest_id = $1
+  AND reservations.end_date < now()::date
+  GROUP BY properties.id, reservations.id
+  ORDER BY reservations.start_date
+  LIMIT $2;`;
+  const params = [guest_id, limit];
+  return pool.query(queryString, params)
+  .then(res => res.rows);
+  }
+  exports.getFulfilledReservations = getFulfilledReservations;
+//   return pool
+//   .query (`SELECT * FROM reservations WHERE guest_id = $1 LIMIT $2;`, [guest_id, limit])
+//   .then((result) => {
+//     return Promise.resolve(result.rows);
+//   })
+//   .catch((err) => {
+//     console.log(err.message);
+//   });
+//   // return getAllProperties(null, 2);
+// }
+// exports.getAllReservations = getAllReservations;
 
 /// Properties
 
@@ -165,7 +180,8 @@ const addProperty = function(property) {
   `${property.country}`, `${property.parking_spaces}`, `${property.number_of_bathrooms}`, `${property.number_of_bedrooms}`)
 
   console.log(insertQuery, queryParams);
-  return pool.query(insertQuery,queryParams). then((res) => res.rows);
+  return pool
+  .query(insertQuery,queryParams). then((res) => res.rows);
   
 }
 exports.addProperty = addProperty;
@@ -178,6 +194,45 @@ const addReservation = function(reservation) {
     INSERT INTO reservations (start_date, end_date, property_id, guest_id)
     VALUES ($1, $2, $3, $4) RETURNING *;
   `, [reservation.start_date, reservation.end_date, reservation.property_id, reservation.guest_id])
-  .then(res => res.rows)
+  .then(res => res.rows[0])
 }
 exports.addReservation = addReservation;
+
+//
+//  Gets upcoming reservations
+//
+const getUpcomingReservations = function(guest_id, limit = 10) {
+  const queryString = ` SELECT properties.*, reservations.*, avg(rating) as average_rating
+  FROM reservations
+  JOIN properties ON reservations.property_id = properties.id
+  JOIN property_reviews ON properties.id = property_reviews.property_id 
+  WHERE reservations.guest_id = $1
+  AND reservations.end_date > now()::date
+  GROUP BY properties.id, reservations.id
+  ORDER BY reservations.start_date
+  LIMIT $2;`;
+  const params = [guest_id, limit];
+  return pool.query(queryString, params)
+    .then(res => res.rows);
+}
+exports.getUpcomingReservations = getUpcomingReservations;
+//
+//  Updates an existing reservation with new information
+//
+const updateReservations = function(reservationId, newReservationData) {
+  
+}
+exports.updateReservations = updateReservations;
+//
+//  Deletes an existing reservation
+//
+const deleteReservation = function(reservationId) {
+
+}
+
+const getIndividualReservation = function(reservationId) {
+  const queryString = `SELECT * FROM reservations WHERE reservations.id = $1`;
+  return pool.query(queryString, [reservationId])
+    .then(res => res.rows[0]);
+}
+exports.getIndividualReservation = getIndividualReservation;
