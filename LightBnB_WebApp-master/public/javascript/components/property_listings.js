@@ -18,8 +18,27 @@ $(() => {
   window.propertyListings.clearListings = clearListings;
 
   function addProperties(properties, isReservation = false) {
-    clearListings();
+    if (!isReservation) {
+        clearListings();
+    }
+    getMyDetails()
+    .then()
+
     for (const propertyId in properties) {
+      if (isReservation) {
+        $('.update-button').on('click', function() {
+          const idData = $(this).attr('id').substring(16);
+          console.log(`update ${idData}`);          
+        })
+        $('.delete-button').on('click', function() {
+          const idData = $(this).attr('id').substring(16);
+          getIndividualReservation(idData).then(data => {
+            views_manager.show("updateReservation", data);
+            console.log(`delete ${idData}`);          
+          });
+        });
+        
+      } 
       const property = properties[propertyId];
       const listing = propertyListing.createListing(property, isReservation);
       addListing(listing);
