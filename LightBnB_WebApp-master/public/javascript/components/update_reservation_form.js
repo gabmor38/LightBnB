@@ -210,12 +210,32 @@ $(() => {
     }
   
     if ((startDate || endDate) && !errorMessage) {
-      const reservationId = $(this).find("#datatag h4").text();
+      //const reservationId = $(this.reservation_id);
+      const reservationId = $(this).find('#datatag-reservation-id').first().text();
       const dataObj = { start_date: startDate, end_date: endDate, reservation_id: reservationId };
-      console.log(dataObj);
+      console.log(formArray);
+      updateReservation(dataObj)
+      .then(data => {
+        console.log(`updated reservation: ${JSON.stringify(data)}`);
+        views_manager.show('none');
+        propertyListings.clearListings();
+        getFulfilledReservations()
+          .then(function(json) {
+            propertyListings.addProperties(json.reservations, { upcoming: false});
+            getUpcomingReservations()
+            .then(json => {
+              propertyListings.addProperties(json.reservations, { upcoming: true});
+            })
+            views_manager.show('listings');
+          })
+      })
+      .catch(error => {
+        console.error(error);
+        views_manager.show('listings');
+      })
     } else {
-      console.log(errorMessage);
-      // we can redisplay the form by pulling the information in the datatag!
+      //console.log('errorMessage');
+     // we can redisplay the form by pulling the information in the datatag!
       const dataObj = {
         id: $(this).find('#datatag-reservation-id').text(),
         start_date: $(this).find('#datatag-start-date').text(),
@@ -223,31 +243,9 @@ $(() => {
         property_id: $(this).find('#datatag-property-id').text(),
         error_message: errorMessage
       }
+      console.log("Help2",dataObj.id)
       views_manager.show('updateReservation', dataObj);
     }
   });
-  // $updateReservationForm .on('submit', function (event) {
-  //   event.preventDefault();
-  //   views_manager.show('none');
-  //   const formArray = $(this).serializeArray();
-  //   const startDate = `${formArray[2].value}-${formArray[1].value}-${formArray[0].value}`
-  //   const endDate = `${formArray[5].value}-${formArray[4].value}-${formArray[3].value}`
-  //   const propertyId = $(this).find("#datatag h4").text();
-  //   const dataObj = { start_date: startDate, end_date: endDate, property_id: propertyId }
-  //   submitReservation(dataObj)
-  //   .then(() => {
-  //     views_manager.show('listings');
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     views_manager.show('listings');
-  //   })
-  // });
-
-  // $('body').on('click', '#reservation-form__cancel', function() {
-  //   views_manager.show('listings');
-  //   return false;
-  // });
-
   window.$updateReservationForm = $updateReservationForm;
 });

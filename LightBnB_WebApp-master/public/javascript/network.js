@@ -39,6 +39,7 @@ function getAllListings(params) {
 }
 
 function getFulfilledReservations() {
+  console.log("5");
   let url = "/api/reservations";
   return $.ajax({
     url,
@@ -53,6 +54,8 @@ const submitProperty = function(data) {
   });
 }
 const submitReservation = function(data) {
+  console.log("4");
+  console.log("submitreser")
   return $.ajax({
     method: "POST",
     url: "/api/reservations",
@@ -61,23 +64,42 @@ const submitReservation = function(data) {
 }
 
 function getUpcomingReservations() {
-  let url = 'api/reservations/upcoming';
+  console.log("3");
+  let url = '/api/reservations/upcoming';
   return $.ajax({
     url,
   });
 }
 
 function getIndividualReservation(reservationId) {
+  console.log("2");
   let url = `/api/reservations/${reservationId}`
   return $.ajax({
     url,
   })
 }
 
+// const updateReservation = function(data) {
+//   console.log("1", data.reservation_id);
+  
+//   return $.ajax({
+//     method: "POST",
+//     url:`/api/reservations/${data.reservation_id}`,
+//     data,
+//   });
+// }
+
 const updateReservation = function(data) {
   return $.ajax({
     method: "POST",
-    url:`api\reservations/${data.reservation_id}`,
+    url: `/api/reservations/${data.reservation_id}`,
     data,
   })
+}
+
+const deleteReservation = function(data) {
+  return $.ajax({
+    method: "DELETE",
+    url: `/api/reservations/${data.reservation_id}`
+  });
 }
