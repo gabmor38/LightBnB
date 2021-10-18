@@ -38,10 +38,13 @@ $(() => {
       })
       $('.delete-button').on('click', function() {
         const idData = $(this).attr('id').substring(16);
-        getIndividualReservation(idData).then(data => {
-          views_manager.show("updateReservation", data);
-          console.log(`delete ${idData}`);          
-        });
+        deleteReservation(idData);
+        // getIndividualReservation(idData).then(data => {
+        $(this).closest('article').remove();
+        // views_manager.show("updateReservation", data);
+        // 
+        console.log(`delete ${idData}`);          
+        // });
       });
     } 
   })

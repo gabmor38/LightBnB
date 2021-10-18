@@ -79,15 +79,6 @@ function getIndividualReservation(reservationId) {
   })
 }
 
-// const updateReservation = function(data) {
-//   console.log("1", data.reservation_id);
-  
-//   return $.ajax({
-//     method: "POST",
-//     url:`/api/reservations/${data.reservation_id}`,
-//     data,
-//   });
-// }
 
 const updateReservation = function(data) {
   return $.ajax({
@@ -96,10 +87,10 @@ const updateReservation = function(data) {
     data,
   })
 }
-
 const deleteReservation = function(data) {
+  console.log("Made it network", data);
   return $.ajax({
     method: "DELETE",
-    url: `/api/reservations/${data.reservation_id}`
+    url: `/api/reservations/${data}`
   });
 }
