@@ -84,6 +84,13 @@ module.exports = function(router, database) {
       console.error(e);
       res.send(e);
     });
-  })
+  });
+
+  // delete a reservation
+  router.delete(`/reservations/:reservation_id`, (req, res) => {
+    const reservationId= req.params.reservation_id;
+    database.deleteReservation(reservationId);
+  });
+
   return router;
 }
