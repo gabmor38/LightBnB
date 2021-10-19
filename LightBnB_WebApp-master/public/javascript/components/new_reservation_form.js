@@ -155,26 +155,25 @@ $(() => {
       <div id="datatag" class="hidden"></div>
     </form>
   `);
-  $newReservationForm.on('submit', function (event) {
+  $newReservationForm.on('submit', function (event){
     event.preventDefault();
     views_manager.show('none');
     const formArray = $(this).serializeArray();
-    const startDate = `${formArray[2].value}-${formArray[1].value}-${formArray[0].value}`
-    const endDate = `${formArray[5].value}-${formArray[4].value}-${formArray[3].value}`
+    const startDate = `${formArray[2].value}-${formArray[1].value}-${formArray[0].value}`;
+    const endDate = `${formArray[5].value}-${formArray[4].value}-${formArray[3].value}`;
     const propertyId = $(this).find("#datatag h4").text();
-    const dataObj = { start_date: startDate, end_date: endDate, property_id: propertyId }
-    console.log("newres")
+    const dataObj = { start_date: startDate, end_date: endDate, property_id: propertyId };
     submitReservation(dataObj)
-    .then(() => {
-      views_manager.show('listings');
-    })
-    .catch((error) => {
-      console.error(error);
-      views_manager.show('listings');
-    })
+      .then(() => {
+        views_manager.show('listings');
+      })
+      .catch((error) => {
+        console.error(error);
+        views_manager.show('listings');
+      });
   });
 
-  $('body').on('click', '#reservation-form__cancel', function() {
+  $('body').on('click', '#reservation-form__cancel', function () {
     views_manager.show('listings');
     return false;
   });

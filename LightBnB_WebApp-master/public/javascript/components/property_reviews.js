@@ -8,7 +8,7 @@ $(() => {
   window.$propertyReviews = $propertyReviews;
 
   // declaring an empty object to add methods onto
-  window.propertyReviews = {}
+  window.propertyReviews = {};
 
   function clearReviews() {
     $propertyReviews.empty();
@@ -20,7 +20,7 @@ $(() => {
     clearReviews();
     $propertyReviews.append(`<h3>Reviews for ${reviews[0].property_title}</h3>`);
     const reviewHtml = reviews.map(review => {
-      const { id, review_rating, review_text, name, start_date, end_date }  = review;
+      const { id, review_rating, review_text, name, start_date, end_date } = review;
       return `
         <article class="property-review">
         <section class="property-review__details">
@@ -29,12 +29,12 @@ $(() => {
           <p>Stay from ${moment(start_date).format('ll')} to ${moment(end_date).format('ll')}</p>
           <p>${review_text}</p> 
         </section>
-      </article>`
+      </article>`;
     }).join('');
     $propertyReviews.append(reviewHtml);
     $propertyReviews.append(`<span class="property-reviews__return">Return to Listings</span>`);
 
-    $('.property-reviews__return').on('click', function() {
+    $('.property-reviews__return').on('click', function () {
       views_manager.show('none');
       views_manager.show('listings');
     });

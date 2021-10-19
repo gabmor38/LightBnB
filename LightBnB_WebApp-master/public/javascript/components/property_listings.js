@@ -19,54 +19,53 @@ $(() => {
 
   function addProperties(properties, isReservation = false) {
     if (!isReservation) {
-        clearListings();
+      clearListings();
     }
     getMyDetails()
-    .then(() => {
+      .then(() => {
 
-    for (const propertyId in properties) {
-      const property = properties[propertyId];
-      const listing = propertyListing.createListing(property, isReservation);
-      addListing(listing);
-    }
-    if (isReservation) {
-      $('.update-button').on('click', function() {
-        const idData = $(this).attr('id').substring(16);
-        getIndividualReservation(idData).then(data =>{
-          views_manager.show("updateReservation", data);
-        })       
+        for (const propertyId in properties) {
+          const property = properties[propertyId];
+          const listing = propertyListing.createListing(property, isReservation);
+          addListing(listing);
+        }
+        if (isReservation) {
+          $('.update-button').on('click', function () {
+            const idData = $(this).attr('id').substring(16);
+            getIndividualReservation(idData).then(data => {
+              views_manager.show("updateReservation", data);
+            });
+          });
+          $('.delete-button').on('click', function () {
+            const idData = $(this).attr('id').substring(16);
+            deleteReservation(idData);
+            // getIndividualReservation(idData).then(data => {
+            $(this).closest('article').remove();
+            // views_manager.show("updateReservation", data);
+            // 
+            console.log(`delete ${idData}`);
+            // });
+          });
+          $('.add-review-button').on('click', function () {
+            const idData = $(this).attr('id').substring(11);
+            views_manager.show("newReview", idData);
+          });
+
+        } else {
+          $('.reserve-button').on('click', function () {
+            const idData = $(this).attr('id').substring(17);
+            views_manager.show('newReservation', idData);
+          });
+          $('.review_details').on('click', function () {
+            const idData = $(this).attr('id').substring(15);
+            views_manager.show('showReviews', idData);
+          });
+        }
       })
-      $('.delete-button').on('click', function() {
-        const idData = $(this).attr('id').substring(16);
-        deleteReservation(idData);
-        // getIndividualReservation(idData).then(data => {
-        $(this).closest('article').remove();
-        // views_manager.show("updateReservation", data);
-        // 
-        console.log(`delete ${idData}`);          
-        // });
+      .catch((err) => {
+        console.error(e);
+        return err.message;
       });
-      $('.add-review-button').on('click', function() {
-        const idData = $(this).attr('id').substring(11);
-        views_manager.show("newReview", idData);
-      })
-
-    } else {
-      $('.reserve-button').on('click', function() {
-        const idData = $(this).attr('id').substring(17);
-        views_manager.show('newReservation', idData);
-      })
-      $('.review_details').on('click', function() {
-        const idData = $(this).attr('id').substring(15);
-        views_manager.show('showReviews', idData);
-      })
-    } 
-    })
-    .catch((err) => {
-      console.error(e);
-      return err.message;
-    });
   }
   window.propertyListings.addProperties = addProperties;
-
 });
