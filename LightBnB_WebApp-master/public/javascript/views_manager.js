@@ -11,6 +11,7 @@ $(() => {
     $logInForm.detach();
     $signUpForm.detach();
     $newReservationForm.detach();
+    $newReviewForm.detach();
     $('#reservation-details').detach()
     // $updateReservationForm.detach();
 
@@ -38,51 +39,42 @@ $(() => {
         $newReservationForm.appendTo($main);
         $(dataTag).appendTo("#datatag");
         break;
-
-      // case 'updateReservation':
-      //   console.log("help",data.id)
-      //   dataTag = `
-      //   <span id="datatag-reservation-id">${data.id}>/span>
-      //   <span id="datatag-start-date">${data.start_date}</span>
-      //   <span id="datatag-end-date">${data.end_date}</span>
-      //   <span id="datatag-property-id">${data.property_id}</span>
-      //   `
-
-      //   const reservationDetails = `
-      //   <div id="reservation-details">
-      //    <h3>Reservation Details</h3>
-      //    <h4>Start date: ${moment(data.start_date).format("MMMM DD, YYYY")}</h4>
-      //    <h4>End date: ${moment(data.end_date).format("MMMM DD, YYYY")}</h4>
-      //   </div>
-      //   `
-      //   const errorMessage = data.error_message ? `<h4>${data.error_message}</h4>` : ``;
-      //   $(reservationDetails).appendTo($main);
-      //   $updateReservationForm.appendTo($main);
-      //   $(dataTag).appendTo("#datatag");
-      //   $(errorMessage).appendTo('#error-message');
-      //   break;
+        
       case 'updateReservation':
-        // since we're getting more information here, we caninclude this in an extended data tag:
+        console.log("help",data.id)
         dataTag = `
-          <span id="datatag-reservation-id">${data.id}</span>
-          <span id="datatag-start-date">${data.start_date}</span>
-          <span id="datatag-end-date">${data.end_date}</span>
-          <span id="datatag-property-id">${data.property_id}</span>
+        <span id="datatag-reservation-id">${data.id}>/span>
+        <span id="datatag-start-date">${data.start_date}</span>
+        <span id="datatag-end-date">${data.end_date}</span>
+        <span id="datatag-property-id">${data.property_id}</span>
         `
+
         const reservationDetails = `
-          <div id="reservation-details">
-            <h3>Reservation Details</h3>
-            <h4>Start date: ${moment(data.start_date).format("MMMMDD, YYYY")}</h4>
-            <h4>End date: ${moment(data.end_date).format("MMMM DD,YYYY")}</h4>
-          </div>
+        <div id="reservation-details">
+         <h3>Reservation Details</h3>
+         <h4>Start date: ${moment(data.start_date).format("MMMM DD, YYYY")}</h4>
+         <h4>End date: ${moment(data.end_date).format("MMMM DD, YYYY")}</h4>
+        </div>
         `
-        // if there's an error message we want to display that aswell:
-        const errorMessage = data.error_message ? `<h4>${dataerror_message}</h4>` : ``;
+        const errorMessage = data.error_message ? `<h4>${data.error_message}</h4>` : ``;
         $(reservationDetails).appendTo($main);
         $updateReservationForm.appendTo($main);
-        $("#datatag").empty();
         $(dataTag).appendTo("#datatag");
         $(errorMessage).appendTo('#error-message');
+        break;
+
+      case 'showReviews':
+        console.log("this is DATA", data);
+        getReviewsByProperty(data)
+        .then(reviews => propertyReviews.addReviews(reviews))
+        $propertyReviews.appendTo($main);
+        break;
+        
+      case 'newReview':
+        dataTag = `<h4>${data}</h4>`;
+        $newReviewForm.appendTo($main);
+        $("#datatag").empty(); 
+        $(dataTag).appendTo("#datatag");
         break;
 
       case 'error': {
@@ -95,8 +87,7 @@ $(() => {
         
         break;
       }
+
     }
-    
   }
-  
 });

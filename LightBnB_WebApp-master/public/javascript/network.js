@@ -94,3 +94,19 @@ const deleteReservation = function(data) {
     url: `/api/reservations/${data}`
   });
 }
+
+const getReviewsByProperty = function(propertyId) {
+  const url = `api/reviews/${propertyId}`;
+  return $.ajax({
+    url,
+  });
+}
+
+const submitReview = function(data) {
+  console.log("submit review",data);
+  return $.ajax({
+    method: "POST",
+    url: `api/reviews/${data.reservationId}`,
+    data,
+  });
+}

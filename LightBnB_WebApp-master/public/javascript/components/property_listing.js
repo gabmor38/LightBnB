@@ -25,11 +25,17 @@ $(() => {
                 <button id="delete-property-${property.id}" class="delete-button">Delete</button>
               ` : ``
             }</div>
+            ${(isReservation && !isReservation.upcoming) ? 
+              `<button id="add-review-${property.id}" class="add-review-button">Add a Review</button>` : ``} 
+            ${!isReservation ? `<span id="review-details-${property.id}" class="review_details review_count">
+              Browse ${property.review_count} reviews
+            </span>` : ``}
           </footer>
         </section>
       </article>
-    `
+    ` 
   }
+  
 
   window.propertyListing.createListing = createListing;
 
