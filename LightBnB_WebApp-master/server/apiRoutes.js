@@ -92,5 +92,32 @@ module.exports = function(router, database) {
     database.deleteReservation(reservationId);
   });
 
+  router.get('/reviews/:property_id', (req, res) => {
+    const propertyId = req.params.property_id
+    console.log("PRO ID", propertyId);
+    database.getReviewsByProperty(propertyId)
+    .then(reviews => {
+      res.send(reviews);
+      console.log("REVIEW",reviews);
+    })
+  })
+
+  // router.post('/reviews/:reservation_id',(req, res) => {
+
+  //   const reservationId = req.params.reservationId;
+  //   database.addReview({...req.body})
+  //   .then(review => {
+  //     res.send(review);
+  //   })
+  // })
+  router.post('/reviews/:reservation_id', (req, res) => {
+    database.addReview(req.body)
+      .then(review => res.send(review))
+      .catch(e => {
+        console.error(e);
+        res.send(e);
+      })
+  })
+
   return router;
 }
