@@ -41,3 +41,6 @@
   * `apiRoutes.js` and `userRoutes.js` are responsible for any HTTP requests to `/users/something` or `/api/something`. 
   * `json` is a directory that contains a bunch of dummy data in `.json` files.
   * `database.js` is responsible for all queries to the database. 
+  
+## Database Schema
+  !["Screenshot of Database Schema"](https://github.com/gabmor38/LightBnB/blob/master/LightBnB_WebApp-master/public/Docs/Screen%20Shot%202021-10-20%20at%2010.37.13%20AM.png?raw=true)
