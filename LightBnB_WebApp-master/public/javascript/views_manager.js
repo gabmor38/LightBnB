@@ -12,6 +12,7 @@ $(() => {
     $signUpForm.detach();
     $newReservationForm.detach();
     $newReviewForm.detach();
+    $updateReservationForm.detach();
     $('#reservation-details').detach();
 
     let dataTag = "";
